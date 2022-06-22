@@ -4,13 +4,26 @@ from money_machine import MoneyMachine
 
 
 class VendingMachine:
-    coffee_type = ["latte", "cappuccino", "espresso"]
+    menu = Menu()
+    coffee_maker = CoffeeMaker()
+    coffee_type = menu.get_items()
     machine = True
 
-    while machine:
-        choice = input("Please choose a coffee: ")
-        if choice == "off":
-            print("Machine is off")
-            machine = False
-        elif choice in coffee_type:
-            print(choice)
+    def run_vending_machine(self):
+        while self.machine:
+            choice = input(f"What would you like? ({self.coffee_type}): ")
+            if choice == "off":
+                print("Machine is off")
+                self.machine = False
+            elif choice == "report":
+                print(self.coffee_maker.report())
+            elif choice in self.coffee_type:
+                self.process_order(choice)
+
+    def process_order(self, choice):
+        print(choice)
+
+
+# Run program
+machine = VendingMachine()
+machine.run_vending_machine()
