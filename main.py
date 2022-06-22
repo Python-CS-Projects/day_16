@@ -7,6 +7,7 @@ class VendingMachine:
     menu = Menu()
     coffee_maker = CoffeeMaker()
     coffee_type = menu.get_items()
+    money_machine = MoneyMachine()
     machine = True
 
     def run_vending_machine(self):
@@ -17,11 +18,21 @@ class VendingMachine:
                 self.machine = False
             elif choice == "report":
                 print(self.coffee_maker.report())
+                print(self.money_machine.report())
             elif choice in self.coffee_type:
-                self.process_order(choice)
+                menu_item = self.menu.find_drink(choice)
+                self.process_order(menu_item)
 
-    def process_order(self, choice):
-        print(choice)
+    def process_order(self, menu_item):
+        enough_resources = self.coffee_maker.is_resource_sufficient(menu_item)
+        if enough_resources:
+            cost = menu_item.cost
+            print(f"Please pay: ${cost}")
+            is_payment_successful = self.money_machine.make_payment(cost)
+            if is_payment_successful:
+                self.coffee_maker.make_coffee(menu_item)
+        else:
+            print("Sorry there is not enough water")
 
 
 # Run program
